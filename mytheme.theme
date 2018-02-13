@@ -1,0 +1,28 @@
+<?php
+
+/**
+ *
+ * Adds theme suggestions for the error pages in Drupal 8.4
+ * @param array $suggestions
+ * @param array $variables
+ *
+ */
+function mytheme_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+
+  $http_error_suggestions = [
+    'system.403' => 'page__403',
+    'system.404' => 'page__404',
+  ];
+
+  $request     = \Drupal::request();
+  $route_match = \Drupal::routeMatch();
+  $title       = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+
+  if ($title == "Page not found"){
+    $suggestions[] = $http_error_suggestions['system.404'];
+  }
+
+  if ($title == "Access denied"){
+    $suggestions[] = $http_error_suggestions['system.403'];
+  }
+}
